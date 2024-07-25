@@ -6,6 +6,7 @@
 *.lock
 *.vsidx
 *.vs
+.env
 .gitattributes
 dist/*
 build/*

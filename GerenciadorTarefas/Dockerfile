@@ -1,23 +1,23 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
+# Use a base image for ASP.NET Core runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["GerenciadorTarefas/GerenciadorTarefas.csproj", "GerenciadorTarefas/"]
-RUN dotnet restore "./GerenciadorTarefas/GerenciadorTarefas.csproj"
+COPY ["GerenciadorTarefas.Application/GerenciadorTarefas.Application.csproj", "GerenciadorTarefas.Application/"]
+COPY ["GerenciadorTarefas.Domain/GerenciadorTarefas.Domain.csproj", "GerenciadorTarefas.Domain/"]
+COPY ["GerenciadorTarefas.Infrastructure/GerenciadorTarefas.Infrastructure.csproj", "GerenciadorTarefas.Infrastructure/"]
+COPY ["GerenciadorTarefas.Presentation/GerenciadorTarefas.Presentation.csproj", "GerenciadorTarefas.Presentation/"]
+RUN dotnet restore "GerenciadorTarefas/GerenciadorTarefas.csproj"
 COPY . .
 WORKDIR "/src/GerenciadorTarefas"
-RUN dotnet build "./GerenciadorTarefas.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "GerenciadorTarefas.csproj" -c Release -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./GerenciadorTarefas.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "GerenciadorTarefas.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
