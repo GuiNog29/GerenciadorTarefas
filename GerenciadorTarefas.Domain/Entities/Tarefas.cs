@@ -8,8 +8,13 @@
         public DateTime DataVencimento { get; set; }
         public int Status { get; set; }
         public required string Prioridade { get; set; }
+
         public int ProjetoId { get; set; }
         public required Projeto Projeto { get; set; }
+
+        public int UsuarioId { get; set; }
+        public required Usuario Usuario { get; set; }
+
         public ICollection<Comentario>? Comentarios { get; set; }
     }
 }
