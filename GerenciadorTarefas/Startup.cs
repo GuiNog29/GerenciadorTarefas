@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using GerenciadorTarefas.Domain.Interfaces;
 using GerenciadorTarefas.Infrastructure.Data;
+using GerenciadorTarefas.Application.Mappings;
 using GerenciadorTarefas.Infrastructure.Repositories;
 
 namespace GerenciadorTarefas
@@ -26,7 +27,7 @@ namespace GerenciadorTarefas
             services.AddScoped<ITarefaRepository, TarefaRepository>();
             services.AddScoped<IComentarioRepository, ComentarioRepository>();
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(AutoMapperProfile));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

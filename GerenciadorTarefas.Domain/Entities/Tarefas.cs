@@ -8,7 +8,7 @@ namespace GerenciadorTarefas.Domain.Entities
         public required string Titulo { get; set; }
         public string? Descricao { get; set; }
         public DateTime DataVencimento { get; set; }
-        public int Status { get; set; }
+        public Status Status { get; set; }
         public required Prioridade Prioridade { get; set; }
 
         public int ProjetoId { get; set; }
