@@ -2,6 +2,7 @@
 using GerenciadorTarefas.Domain.Entities;
 using GerenciadorTarefas.Domain.Interfaces;
 using GerenciadorTarefas.Infrastructure.Data;
+using GerenciadorTarefas.Domain.Enums;
 
 namespace GerenciadorTarefas.Infrastructure.Repositories
 {
@@ -26,7 +27,7 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             if (projeto == null)
                 throw new KeyNotFoundException($"Projeto com ID {projetoId} não foi encontrado.");
 
-            if (projeto.Tarefas != null && projeto.Tarefas.Count > 0)
+            if (projeto.Tarefas != null && projeto.Tarefas.Any(x => x.Status == Status.Pendente || x.Status == Status.EmAndamento))
                 throw new Exception($"Projeto {projeto.NomeProjeto} ainda contém tarefas não finalizadas, conclua ou exclua todas antes de excluir o projeto.");
 
             _context.Projetos.Remove(projeto);
