@@ -12,10 +12,10 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Usuario> BuscarPorId(int id)
+        public async Task<Usuario> BuscarPorId(int usuarioId)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            return usuario ?? throw new KeyNotFoundException($"Usuário com ID {id} não foi encontrado.");
+            var usuario = await _context.Usuarios.FindAsync(usuarioId);
+            return usuario ?? throw new KeyNotFoundException($"Usuário com ID {usuarioId} não foi encontrado.");
         }
 
         public async Task<Usuario> CadastrarUsuario(Usuario usuario)

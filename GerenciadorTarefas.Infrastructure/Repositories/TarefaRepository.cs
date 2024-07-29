@@ -1,4 +1,5 @@
-﻿using GerenciadorTarefas.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using GerenciadorTarefas.Domain.Entities;
 using GerenciadorTarefas.Domain.Interfaces;
 using GerenciadorTarefas.Infrastructure.Data;
 
@@ -7,34 +8,62 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
     public class TarefaRepository : ITarefaRepository
     {
         private readonly TarefaDbContext _context;
-        public TarefaRepository(TarefaDbContext context)
+        private readonly ComentarioDbContext _comentarioContext;
+
+        public TarefaRepository(TarefaDbContext context, ComentarioDbContext comentarioContext)
         {
             _context = context;
+            _comentarioContext = comentarioContext;
         }
 
-        public Task<string> AtualizarProjeto(Tarefa tarefa)
+        public async Task<Tarefa> CadastrarTarefa(Tarefa tarefa)
         {
-            throw new NotImplementedException();
+            _context.Tarefas.Add(tarefa);
+            await _context.SaveChangesAsync();
+            return tarefa;
         }
 
-        public Task<Tarefa> CadastrarTarefa(Tarefa tarefa)
+        public async Task<Tarefa> AtualizarTarefa(Tarefa tarefa)
         {
-            throw new NotImplementedException();
+            var tarefaExistente = await _context.Tarefas.FirstOrDefaultAsync(x => x.Id == tarefa.Id);
+            if (tarefaExistente == null) 
+                throw new KeyNotFoundException($"Tarefa com ID {tarefa.Id} não foi encontrada.");
+
+            _context.Entry(tarefaExistente).CurrentValues.SetValues(tarefa);
+            await _context.SaveChangesAsync();
+            return tarefaExistente;
         }
 
-        public Task<string> ExcluirTarefa(int tarefaId)
+        public async Task<bool> ExcluirTarefa(int tarefaId)
         {
-            throw new NotImplementedException();
+            var tarefa = await _context.Tarefas.FindAsync(tarefaId);
+            if (tarefa == null)
+                throw new KeyNotFoundException($"Tarefa com ID {tarefaId} não foi encontrada.");
+
+            if (tarefa.Comentarios != null && tarefa.Comentarios.Count != 0)
+                _comentarioContext.Comentarios.RemoveRange(tarefa.Comentarios);
+
+            _context.Tarefas.Remove(tarefa);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<IEnumerable<Tarefa>> ListarTarefas(int projetoId)
+        public async Task<IEnumerable<Tarefa>> ListarTarefas(int projetoId)
         {
-            throw new NotImplementedException();
+            var tarefas = await _context.Tarefas.Include(x => x.Comentarios).Where(x => x.ProjetoId == projetoId).ToListAsync();
+            if (tarefas.Count == 0) 
+                throw new Exception($"Não foi encontrado nenhuma tarefa no projeto, favor cadastrar novas tarefas.");
+
+            return tarefas;
         }
 
-        public Task<Tarefa> VisualizarTarefa(int tarefaId)
+        public async Task<Tarefa> VisualizarTarefa(int tarefaId)
         {
-            throw new NotImplementedException();
+            var tarefa = await _context.Tarefas.Include(x => x.Comentarios).FirstOrDefaultAsync(x => x.Id == tarefaId);
+            if(tarefa == null) 
+                throw new KeyNotFoundException($"Tarefa com ID {tarefaId} não foi encontrada.");
+
+            return tarefa;
         }
     }
 }
