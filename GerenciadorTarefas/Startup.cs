@@ -16,7 +16,7 @@ namespace GerenciadorTarefas
         {
             services.AddControllers();
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<UsuarioDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             //services.AddScoped<>();

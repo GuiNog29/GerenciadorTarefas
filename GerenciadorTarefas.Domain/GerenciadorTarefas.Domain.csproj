@@ -16,4 +16,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GerenciadorTarefas.Application\GerenciadorTarefas.Application.csproj" />
+    <ProjectReference Include="..\GerenciadorTarefas.Presentation\GerenciadorTarefas.Presentation.csproj" />
+  </ItemGroup>
+
 </Project>

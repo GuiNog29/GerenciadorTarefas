@@ -4,5 +4,7 @@
     {
         public int Id { get; set; }
         public required string Nome { get; set; }
+
+        public Tarefa? Tarefa { get; set; }
     }
 }
