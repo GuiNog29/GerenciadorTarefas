@@ -1,4 +1,5 @@
-﻿using GerenciadorTarefas.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using GerenciadorTarefas.Domain.Entities;
 using GerenciadorTarefas.Domain.Interfaces;
 using GerenciadorTarefas.Infrastructure.Data;
 
@@ -12,24 +13,40 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task<Projeto> CadastrarProjeto(Projeto projeto)
+        public async Task<Projeto> CadastrarProjeto(Projeto projeto)
         {
-            throw new NotImplementedException();
+            _context.Projetos.Add(projeto);
+            await _context.SaveChangesAsync();
+            return projeto;
         }
 
-        public Task<string> ExcluirProjeto(int projetoId)
+        public async Task<bool> ExcluirProjeto(int projetoId)
         {
-            throw new NotImplementedException();
+            var projeto = await _context.Projetos.FindAsync(projetoId);
+            if (projeto == null)
+                throw new KeyNotFoundException($"Projeto com ID {projetoId} não foi encontrado.");
+
+            if (projeto.Tarefas != null && projeto.Tarefas.Count > 0)
+                throw new Exception($"Projeto {projeto.NomeProjeto} ainda contém tarefas não finalizadas, conclua ou exclua todas antes de excluir o projeto.");
+
+            _context.Projetos.Remove(projeto);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<IEnumerable<Projeto>> ListarProjetos()
+        public async Task<IEnumerable<Projeto>> ListarProjetos()
         {
-            throw new NotImplementedException();
+            var projetos = await _context.Projetos.ToListAsync();
+            if (projetos.Count == 0) 
+                throw new Exception("Não foi encontrado nenhum projeto, favor cadastrar.");
+
+            return projetos;
         }
 
-        public Task<Projeto> VisualizarProjeto(int projetoId)
+        public async Task<Projeto> VisualizarProjeto(int projetoId)
         {
-            throw new NotImplementedException();
+            var projeto = await _context.Projetos.FindAsync(projetoId);
+            return projeto ?? throw new KeyNotFoundException($"Projeto com ID {projetoId} não foi encontrado.");
         }
     }
 }

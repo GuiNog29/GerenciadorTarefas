@@ -1,5 +1,7 @@
-﻿using GerenciadorTarefas.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using GerenciadorTarefas.Domain.Interfaces;
+using GerenciadorTarefas.Infrastructure.Data;
+using GerenciadorTarefas.Infrastructure.Repositories;
 
 namespace GerenciadorTarefas
 {
@@ -19,7 +21,10 @@ namespace GerenciadorTarefas
             services.AddDbContext<UsuarioDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddScoped<>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IProjetoRepository, ProjetoRepository>();
+            services.AddScoped<ITarefaRepository, TarefaRepository>();
+            services.AddScoped<IComentarioRepository, ComentarioRepository>();
 
             services.AddAutoMapper(typeof(Startup));
         }

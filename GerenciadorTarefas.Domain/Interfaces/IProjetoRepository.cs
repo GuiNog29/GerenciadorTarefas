@@ -6,7 +6,7 @@ namespace GerenciadorTarefas.Domain.Interfaces
     {
         Task<Projeto> CadastrarProjeto(Projeto projeto);
         Task<Projeto> VisualizarProjeto(int projetoId);
-        Task<string> ExcluirProjeto(int projetoId);
+        Task<bool> ExcluirProjeto(int projetoId);
         Task<IEnumerable<Projeto>> ListarProjetos();
     }
 }

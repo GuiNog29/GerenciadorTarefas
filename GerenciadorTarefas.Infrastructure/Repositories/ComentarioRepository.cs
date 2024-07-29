@@ -1,4 +1,5 @@
-﻿using GerenciadorTarefas.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using GerenciadorTarefas.Domain.Entities;
 using GerenciadorTarefas.Domain.Interfaces;
 using GerenciadorTarefas.Infrastructure.Data;
 
@@ -7,19 +8,26 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
     public class ComentarioRepository : IComentarioRepository
     {
         private readonly ComentarioDbContext _context;
+
         public ComentarioRepository(ComentarioDbContext context)
         {
             _context = context;
         }
 
-        public Task<Comentario> AdicionarComentario(Comentario comentario)
+        public async Task<Comentario> AdicionarComentario(Comentario comentario)
         {
-            throw new NotImplementedException();
+            _context.Comentarios.Add(comentario);
+            await _context.SaveChangesAsync();
+            return comentario;
         }
 
-        public Task<IEnumerable<Comentario>> BuscarComentario(int tarefaId)
+        public async Task<IEnumerable<Comentario>> BuscarComentarios(int tarefaId)
         {
-            throw new NotImplementedException();
+            var comentarios = await _context.Comentarios.Where(x => x.TarefaId == tarefaId).ToListAsync();
+            if (comentarios.Count == 0)
+                throw new Exception($"Não foi encontrado nenhum comentário para esta tarefa, favor adicionar novos comentários.");
+             
+            return comentarios;
         }
     }
 }

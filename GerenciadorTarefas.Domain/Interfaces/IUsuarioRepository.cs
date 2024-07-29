@@ -4,7 +4,7 @@ namespace GerenciadorTarefas.Domain.Interfaces
 {
     public interface IUsuarioRepository
     {
-        Task<Usuario> BuscarPorId(int id);
+        Task<Usuario> BuscarPorId(int usuarioId);
         Task<Usuario> CadastrarUsuario(Usuario usuario);
     }
 }
