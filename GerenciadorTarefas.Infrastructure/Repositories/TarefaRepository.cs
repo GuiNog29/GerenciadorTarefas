@@ -29,7 +29,12 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             if (tarefaExistente == null) 
                 throw new KeyNotFoundException($"Tarefa com ID {tarefa.Id} não foi encontrada.");
 
+            var prioridade = tarefaExistente.Prioridade;
+
             _context.Entry(tarefaExistente).CurrentValues.SetValues(tarefa);
+
+            tarefaExistente.Prioridade = prioridade;
+
             await _context.SaveChangesAsync();
             return tarefaExistente;
         }

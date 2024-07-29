@@ -1,4 +1,6 @@
-﻿namespace GerenciadorTarefas.Domain.Entities
+﻿using GerenciadorTarefas.Domain.Enums;
+
+namespace GerenciadorTarefas.Domain.Entities
 {
     public class Tarefa
     {
@@ -7,7 +9,7 @@
         public string? Descricao { get; set; }
         public DateTime DataVencimento { get; set; }
         public int Status { get; set; }
-        public required string Prioridade { get; set; }
+        public required Prioridade Prioridade { get; set; }
 
         public int ProjetoId { get; set; }
         public required Projeto Projeto { get; set; }
