@@ -15,6 +15,8 @@ namespace GerenciadorTarefas.Application.Mappings
 
             CreateMap<Comentario, ComentarioDto>().ReverseMap();
 
+            CreateMap<RelatorioDesempenhoUsuario, RelatorioDesempenhoUsuarioDto>().ReverseMap();
+
             CreateMap<Tarefa, TarefaDto>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => EnumExtensions.ObterDescricaoEnum(src.Status)))
                 .ForMember(dest => dest.Prioridade, opt => opt.MapFrom(src => EnumExtensions.ObterDescricaoEnum(src.Prioridade)))

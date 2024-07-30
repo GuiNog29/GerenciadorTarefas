@@ -9,5 +9,6 @@ namespace GerenciadorTarefas.Domain.Interfaces
         Task<bool> ExcluirTarefa(int tarefaId);
         Task<Tarefa> AtualizarTarefa(Tarefa tarefa);
         Task<IEnumerable<Tarefa>> ListarTarefas(int projetoId);
+        Task<IEnumerable<RelatorioDesempenhoUsuario>> GerarRelatorioDesempenhoUsuario(int usuarioId);
     }
 }
