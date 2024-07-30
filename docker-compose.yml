@@ -1,23 +1,26 @@
 version: '3.4'
 
 services:
-  gerenciadortarefas:
-    image: gerenciadortarefas
-    build:
-      context: .
-      dockerfile: GerenciadorTarefas/Dockerfile
-    ports:
-      - "5000:80"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
-    depends_on:
-      - sqlserver
+     gerenciadortarefas.api:
+       image: ${DOCKER_REGISTRY-}gerenciadortarefasapi
+       build:
+         context: .
+         dockerfile: GerenciadorTarefas/Dockerfile
+       ports:
+         - "5000:80"
+       depends_on:
+         - sqlserver
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      SA_PASSWORD: ${DB_PASSWORD}
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
+     sqlserver:
+        container_name: GerenciadorTarefasDb
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        hostname: 'sqlserver'
+        environment:
+          SA_PASSWORD: ${DB_PASSWORD}
+          ACCEPT_EULA: "Y"
+        volumes:
+          - c:\dados\volumes\mssql:/var/opt/mssql3
+        ports:
+          - "11433:1433"
+        expose:
+          - 1433
