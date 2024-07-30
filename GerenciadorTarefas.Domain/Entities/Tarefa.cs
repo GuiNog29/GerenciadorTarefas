@@ -18,5 +18,6 @@ namespace GerenciadorTarefas.Domain.Entities
         public required Usuario Usuario { get; set; }
 
         public ICollection<Comentario>? Comentarios { get; set; }
+        public ICollection<TarefaHistorico>? TarefaHistoricos { get; set; }
     }
 }

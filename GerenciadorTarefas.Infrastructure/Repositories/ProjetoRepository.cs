@@ -8,8 +8,8 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
 {
     public class ProjetoRepository : IProjetoRepository
     {
-        private readonly ProjetoDbContext _context;
-        public ProjetoRepository(ProjetoDbContext context)
+        private readonly GerenciadorTarefasDbContext _context;
+        public ProjetoRepository(GerenciadorTarefasDbContext context)
         {
             _context = context;
         }

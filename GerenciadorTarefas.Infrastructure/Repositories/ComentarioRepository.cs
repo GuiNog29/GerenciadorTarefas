@@ -7,9 +7,9 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
 {
     public class ComentarioRepository : IComentarioRepository
     {
-        private readonly ComentarioDbContext _context;
+        private readonly GerenciadorTarefasDbContext _context;
 
-        public ComentarioRepository(ComentarioDbContext context)
+        public ComentarioRepository(GerenciadorTarefasDbContext context)
         {
             _context = context;
         }

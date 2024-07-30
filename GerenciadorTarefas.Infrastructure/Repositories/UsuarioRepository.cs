@@ -6,8 +6,8 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private readonly UsuarioDbContext _context;
-        public UsuarioRepository(UsuarioDbContext context)
+        private readonly GerenciadorTarefasDbContext _context;
+        public UsuarioRepository(GerenciadorTarefasDbContext context)
         {
             _context = context;
         }
