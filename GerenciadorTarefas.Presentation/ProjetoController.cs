@@ -1,7 +1,6 @@
-﻿using GerenciadorTarefas.Application.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using GerenciadorTarefas.Application.DTOs;
 using GerenciadorTarefas.Application.Interfaces;
-using GerenciadorTarefas.Application.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorTarefas.Presentation
 {
