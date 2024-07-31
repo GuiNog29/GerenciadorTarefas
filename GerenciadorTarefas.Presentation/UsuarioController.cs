@@ -15,7 +15,7 @@ namespace GerenciadorTarefas.Presentation
             _usuarioService = usuarioService;
         }
 
-        [HttpPost]
+        [HttpPost("CadastrarUsuario")]
         public async Task<IActionResult> CadastrarUsuario(UsuarioDto usuarioDto)
         {
             if (!ModelState.IsValid)
@@ -36,7 +36,7 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpGet("{usuarioId}")]
+        [HttpGet("BuscarPorId/{usuarioId}")]
         public async Task<IActionResult> BuscarPorId(int usuarioId)
         {
             if (!ModelState.IsValid)

@@ -16,7 +16,7 @@ namespace GerenciadorTarefas.Presentation
             _tarefaService = tarefaService;
         }
 
-        [HttpPost]
+        [HttpPost("CadastrarTarefa")]
         public async Task<IActionResult> CadastrarTarefa(TarefaDto tarefaDto)
         {
             if (!ModelState.IsValid)
@@ -37,15 +37,15 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpGet("visualizarTarefa/{tarefaId}")]
-        public async Task<IActionResult> VisualizarTarefa(int tarefaId)
+        [HttpGet("VisualizarTarefa")]
+        public async Task<IActionResult> VisualizarTarefa(int projetoId, int tarefaId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var tarefa = await _tarefaService.VisualizarTarefa(tarefaId);
+                var tarefa = await _tarefaService.VisualizarTarefa(projetoId, tarefaId);
                 return Ok(tarefa);
             }
             catch (Exception ex)
@@ -58,7 +58,7 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpPut]
+        [HttpPut("AtualizarTarefa")]
         public async Task<IActionResult> AtualizarTarefa(TarefaDto tarefaDto)
         {
             if (!ModelState.IsValid)
@@ -79,15 +79,15 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpDelete("{tarefaId}")]
-        public async Task<IActionResult> ExcluirTarefa(int tarefaId)
+        [HttpDelete("ExcluirTarefa")]
+        public async Task<IActionResult> ExcluirTarefa(int projetoId, int tarefaId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                return Ok(await _tarefaService.ExcluirTarefa(tarefaId));
+                return Ok(await _tarefaService.ExcluirTarefa(projetoId, tarefaId));
             }
             catch (Exception ex)
             {
@@ -99,7 +99,7 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpGet("listarTarefas/{projetoId}")]
+        [HttpGet("ListarTarefas/{projetoId}")]
         public async Task<IActionResult> ListarTarefas(int projetoId)
         {
             if (!ModelState.IsValid)

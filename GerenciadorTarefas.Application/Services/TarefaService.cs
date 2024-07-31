@@ -33,10 +33,10 @@ namespace GerenciadorTarefas.Application.Services
             return _mapper.Map<TarefaDto>(tarefaAtualizada);
         }
         
-        public async Task<bool> ExcluirTarefa(int tarefaId)
+        public async Task<bool> ExcluirTarefa(int projetoId, int tarefaId)
         {
             ValidarTarefaId(tarefaId);
-            return await _tarefaRepository.ExcluirTarefa(tarefaId);
+            return await _tarefaRepository.ExcluirTarefa(projetoId, tarefaId);
         }
 
         public async Task<IEnumerable<TarefaDto>> ListarTarefas(int projetoId)
@@ -46,10 +46,10 @@ namespace GerenciadorTarefas.Application.Services
             return _mapper.Map<IEnumerable<TarefaDto>>(listaTarefas);
         }
 
-        public async Task<TarefaDto> VisualizarTarefa(int tarefaId)
+        public async Task<TarefaDto> VisualizarTarefa(int projetoId, int tarefaId)
         {
             ValidarTarefaId(tarefaId);
-            var tarefa = await _tarefaRepository.VisualizarTarefa(tarefaId);
+            var tarefa = await _tarefaRepository.VisualizarTarefa(projetoId, tarefaId);
             return _mapper.Map<TarefaDto>(tarefa);
         }
 

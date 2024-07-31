@@ -4,6 +4,7 @@ using GerenciadorTarefas.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorTarefas.Infrastructure.Migrations
 {
     [DbContext(typeof(GerenciadorTarefasDbContext))]
-    partial class GerenciadorTarefasDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240731005208_AddBlogCreatedTimestamp")]
+    partial class AddBlogCreatedTimestamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,7 +105,8 @@ namespace GerenciadorTarefas.Infrastructure.Migrations
 
                     b.HasIndex("ProjetoId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioId")
+                        .IsUnique();
 
                     b.ToTable("Tarefas");
                 });
@@ -188,8 +192,8 @@ namespace GerenciadorTarefas.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("GerenciadorTarefas.Domain.Entities.Usuario", "Usuario")
-                        .WithMany("Tarefas")
-                        .HasForeignKey("UsuarioId")
+                        .WithOne("Tarefa")
+                        .HasForeignKey("GerenciadorTarefas.Domain.Entities.Tarefa", "UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -233,7 +237,7 @@ namespace GerenciadorTarefas.Infrastructure.Migrations
                 {
                     b.Navigation("Projetos");
 
-                    b.Navigation("Tarefas");
+                    b.Navigation("Tarefa");
                 });
 #pragma warning restore 612, 618
         }

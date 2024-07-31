@@ -7,6 +7,6 @@ namespace GerenciadorTarefas.Application.Interfaces
         Task<ProjetoDto> CadastrarProjeto(ProjetoDto projetoDto);
         Task<ProjetoDto> VisualizarProjeto(int projetoId);
         Task<bool> ExcluirProjeto(int projetoId);
-        Task<IEnumerable<ProjetoDto>> ListarProjetos();
+        Task<IEnumerable<ProjetoDto>> ListarProjetos(int usuarioId);
     }
 }

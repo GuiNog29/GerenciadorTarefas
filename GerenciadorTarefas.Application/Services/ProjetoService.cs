@@ -33,9 +33,9 @@ namespace GerenciadorTarefas.Application.Services
             return await _projetoRepository.ExcluirProjeto(projetoId);
         }
 
-        public async Task<IEnumerable<ProjetoDto>> ListarProjetos()
+        public async Task<IEnumerable<ProjetoDto>> ListarProjetos(int usuarioId)
         {
-            var projetos = await _projetoRepository.ListarProjetos();
+            var projetos = await _projetoRepository.ListarProjetos(usuarioId);
             return _mapper.Map<IEnumerable<ProjetoDto>>(projetos);
         }
 

@@ -8,28 +8,37 @@ using GerenciadorTarefas.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar serviços
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "GerenciadorTarefas.Api",
+        Version = "v1"
+    });
+    c.EnableAnnotations();
+});
 
-// Registrando DbContext
+// Configurar DbContext
 builder.Services.AddDbContext<GerenciadorTarefasDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Registrando Repositórios
+// Registrar repositórios
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IProjetoRepository, ProjetoRepository>();
 builder.Services.AddScoped<ITarefaRepository, TarefaRepository>();
 builder.Services.AddScoped<IComentarioRepository, ComentarioRepository>();
 
-// Registrando Serviços
+// Registrar serviços
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IProjetoService, ProjetoService>();
 builder.Services.AddScoped<ITarefaService, TarefaService>();
 builder.Services.AddScoped<IComentarioService, ComentarioService>();
 builder.Services.AddScoped<IRelatorioService, RelatorioService>();
 
+// Configurar AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();
@@ -46,9 +55,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

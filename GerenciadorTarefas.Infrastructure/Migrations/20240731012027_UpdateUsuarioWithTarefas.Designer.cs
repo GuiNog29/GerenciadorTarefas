@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorTarefas.Infrastructure.Migrations
 {
     [DbContext(typeof(GerenciadorTarefasDbContext))]
-    [Migration("20240729201359_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240731012027_UpdateUsuarioWithTarefas")]
+    partial class UpdateUsuarioWithTarefas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,7 +61,12 @@ namespace GerenciadorTarefas.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Projetos");
                 });
@@ -100,8 +105,7 @@ namespace GerenciadorTarefas.Infrastructure.Migrations
 
                     b.HasIndex("ProjetoId");
 
-                    b.HasIndex("UsuarioId")
-                        .IsUnique();
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Tarefas");
                 });
@@ -167,6 +171,17 @@ namespace GerenciadorTarefas.Infrastructure.Migrations
                     b.Navigation("Tarefa");
                 });
 
+            modelBuilder.Entity("GerenciadorTarefas.Domain.Entities.Projeto", b =>
+                {
+                    b.HasOne("GerenciadorTarefas.Domain.Entities.Usuario", "Usuario")
+                        .WithMany("Projetos")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("GerenciadorTarefas.Domain.Entities.Tarefa", b =>
                 {
                     b.HasOne("GerenciadorTarefas.Domain.Entities.Projeto", "Projeto")
@@ -176,8 +191,8 @@ namespace GerenciadorTarefas.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("GerenciadorTarefas.Domain.Entities.Usuario", "Usuario")
-                        .WithOne("Tarefa")
-                        .HasForeignKey("GerenciadorTarefas.Domain.Entities.Tarefa", "UsuarioId")
+                        .WithMany("Tarefas")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -219,7 +234,9 @@ namespace GerenciadorTarefas.Infrastructure.Migrations
 
             modelBuilder.Entity("GerenciadorTarefas.Domain.Entities.Usuario", b =>
                 {
-                    b.Navigation("Tarefa");
+                    b.Navigation("Projetos");
+
+                    b.Navigation("Tarefas");
                 });
 #pragma warning restore 612, 618
         }
