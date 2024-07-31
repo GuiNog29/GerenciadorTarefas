@@ -15,7 +15,7 @@ namespace GerenciadorTarefas.Presentation
             _projetoService = projetoService;
         }
 
-        [HttpPost]
+        [HttpPost("CadastrarProjeto")]
         public async Task<IActionResult> CadastrarProjeto(ProjetoDto projetoDto)
         {
             if (!ModelState.IsValid)
@@ -36,7 +36,7 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpGet("{projetoId}")]
+        [HttpGet("VisualizarProjeto/{projetoId}")]
         public async Task<IActionResult> VisualizarProjeto(int projetoId)
         {
             if (!ModelState.IsValid)
@@ -57,7 +57,7 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpDelete("{projetoId}")]
+        [HttpDelete("ExcluirProjeto/{projetoId}")]
         public async Task<IActionResult> ExcluirProjeto(int projetoId)
         {
             if (!ModelState.IsValid)
@@ -77,15 +77,15 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListarProjetos()
+        [HttpGet("ListarProjetos")]
+        public async Task<IActionResult> ListarProjetos(int usuarioId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var listaProjetos = await _projetoService.ListarProjetos();
+                var listaProjetos = await _projetoService.ListarProjetos(usuarioId);
                 return Ok(listaProjetos);
             }
             catch (Exception ex)

@@ -35,9 +35,9 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Projeto>> ListarProjetos()
+        public async Task<IEnumerable<Projeto>> ListarProjetos(int usuarioId)
         {
-            var projetos = await _context.Projetos.ToListAsync();
+            var projetos = await _context.Projetos.Where(x => x.UsuarioId == usuarioId).ToListAsync();
             if (projetos.Count == 0) 
                 throw new Exception("Não foi encontrado nenhum projeto, favor cadastrar.");
 

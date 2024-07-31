@@ -21,14 +21,12 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             if (projeto == null)
                 throw new KeyNotFoundException($"Projeto com ID {tarefa.ProjetoId} não foi encontrado.");
 
-            if (projeto.Tarefas != null && projeto.Tarefas.Count <= 20)
-            {
-                _context.Tarefas.Add(tarefa);
-                await _context.SaveChangesAsync();
-                return tarefa;
-            }
-            else
+            if (projeto.Tarefas != null && projeto.Tarefas.Count >= 20)
                 throw new Exception($"Projeto {projeto.NomeProjeto} só pode conter até 20 tarefas");
+
+            _context.Tarefas.Add(tarefa);
+            await _context.SaveChangesAsync();
+            return tarefa;
         }
 
         public async Task<Tarefa> AtualizarTarefa(Tarefa tarefa)
@@ -43,9 +41,9 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             return tarefaExistente;
         }
 
-        public async Task<bool> ExcluirTarefa(int tarefaId)
+        public async Task<bool> ExcluirTarefa(int projetoId, int tarefaId)
         {
-            var tarefa = await _context.Tarefas.FindAsync(tarefaId);
+            var tarefa = await _context.Tarefas.Where(x => x.ProjetoId == projetoId && x.Id == tarefaId).FirstOrDefaultAsync();
             if (tarefa == null)
                 throw new KeyNotFoundException($"Tarefa com ID {tarefaId} não foi encontrada.");
 
@@ -66,7 +64,7 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             return tarefas;
         }
 
-        public async Task<Tarefa> VisualizarTarefa(int tarefaId)
+        public async Task<Tarefa> VisualizarTarefa(int projetoId, int tarefaId)
         {
             var tarefa = await _context.Tarefas.Include(x => x.Comentarios).FirstOrDefaultAsync(x => x.Id == tarefaId);
             if (tarefa == null)
@@ -93,13 +91,13 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
         private void VerificarAlteracoesESalvarHistorico(Tarefa tarefaExistente, Tarefa tarefa)
         {
             var alteracoes = new List<string>();
-            if (tarefaExistente.Titulo != tarefa.Titulo)
+            if (tarefa.Titulo != null && tarefaExistente.Titulo != tarefa.Titulo)
             {
                 alteracoes.Add($"Título alterado de '{tarefaExistente.Titulo}' para '{tarefa.Titulo}'");
                 tarefaExistente.Titulo = tarefa.Titulo;
             }
 
-            if (tarefaExistente.Descricao != tarefa.Descricao)
+            if (tarefa.Descricao != null && tarefaExistente.Descricao != tarefa.Descricao)
             {
                 alteracoes.Add($"Descrição alterada de '{tarefaExistente.Descricao}' para '{tarefa.Descricao}'");
                 tarefaExistente.Descricao = tarefa.Descricao;
@@ -112,6 +110,7 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             }
 
             var prioridade = tarefaExistente.Prioridade;
+            ValidarCamposNaoObrigatorios(tarefaExistente, tarefa);
             _context.Entry(tarefaExistente).CurrentValues.SetValues(tarefa);
             tarefaExistente.Prioridade = prioridade;
 
@@ -119,6 +118,15 @@ namespace GerenciadorTarefas.Infrastructure.Repositories
             {
                 AdicionarAlteracaoHistorico(tarefaExistente, alteracao);
             }
+        }
+
+        private void ValidarCamposNaoObrigatorios(Tarefa tarefaExistente, Tarefa tarefa)
+        {
+            if (string.IsNullOrEmpty(tarefa.Titulo))
+                tarefa.Titulo = tarefaExistente.Titulo;
+
+            if (string.IsNullOrEmpty(tarefa.Descricao))
+                tarefa.Descricao = tarefaExistente.Descricao;
         }
 
         public async Task<IEnumerable<RelatorioDesempenhoUsuario>> GerarRelatorioDesempenhoUsuario(int usuarioId)

@@ -15,7 +15,7 @@ namespace GerenciadorTarefas.Presentation
             _comentarioService = comentarioService;
         }
 
-        [HttpPost]
+        [HttpPost("AdicionarComentario")]
         public async Task<IActionResult> AdicionarComentario(ComentarioDto comentarioDto)
         {
             if (!ModelState.IsValid)
@@ -36,7 +36,7 @@ namespace GerenciadorTarefas.Presentation
             }
         }
 
-        [HttpGet("{tarefaId}")]
+        [HttpGet("BuscarComentarios/{tarefaId}")]
         public async Task<IActionResult> BuscarComentarios(int tarefaId)
         {
             if (!ModelState.IsValid)

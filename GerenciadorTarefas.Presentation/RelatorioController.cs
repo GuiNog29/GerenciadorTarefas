@@ -18,7 +18,7 @@ namespace GerenciadorTarefas.Presentation
             _usuarioService = usuarioService;
         }
 
-        [HttpGet]
+        [HttpGet("GerarRelatorioDesempenhoUsuario")]
         public async Task<IActionResult> GerarRelatorioDesempenhoUsuario(int usuarioId)
         {
             if (!ModelState.IsValid)
